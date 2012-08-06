@@ -20,6 +20,9 @@ Class to change brightness in Sony VPC Series notebook`s in Linux.
     Wrong percentage. Must be > 10% and < 100%.
     >>> type(b.max_bright) == type(1)
     True
+    >>> b.set(90, True)
+    Setted percentage to 90%.
+    >>> 
 '''
 
 import commands
@@ -29,8 +32,8 @@ _COMMANDS = {
     'change': 'echo %d| tee /sys/class/backlight/intel_backlight/brightness',
     'actual': 'cat /sys/class/backlight/intel_backlight/brightness'
 }
-_MIN_BRIGHT_RATIO = 0.10
-_STEP = 0.5
+_MIN_BRIGHT_RATIO = 0.1
+_STEP = 0.05
 
 class Brightness(object):
     
@@ -79,7 +82,7 @@ class Brightness(object):
 
     def set_down(self):
         actual_ratio = (self.actual_bright / float(self.max_bright))
-        self.set(100 * (actual_ratio + _STEP))
+        self.set(100 * (actual_ratio - _STEP))
 
     def set_min(self):
         self.set(int(100 * _MIN_BRIGHT_RATIO))
@@ -92,5 +95,10 @@ class Brightness(object):
         if (min_bright) <= percent <= 100:
             bright = int(self._max * (percent/100.))
             self._execute_command(_COMMANDS['change'] % bright)
+            if verbose:
+                print 'Setted percentage to %d%%.' % percent
         else:
-            print 'Wrong percentage. Must be > %d%% and < 100%%.' % min_bright 
+            print 'Wrong percentage. Must be > %d%% and < 100%%.' % min_bright
+
+if __name__ == '__main__':
+    b = Brightness()
