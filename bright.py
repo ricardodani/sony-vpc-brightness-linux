@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- encoding: utf-8 -*-
 
 # Author: Ricardo Dani
@@ -22,9 +23,12 @@ Class to change brightness in Sony VPC Series notebook`s in Linux.
     True
     >>> b.set(90, True)
     Setted percentage to 90%.
-    >>> 
+    >>> b.actual_bright # get the actual brightness percentage
+    90
+    >>>
 '''
 
+import sys
 import commands
 
 _COMMANDS = {
@@ -35,7 +39,9 @@ _COMMANDS = {
 _MIN_BRIGHT_RATIO = 0.1
 _STEP = 0.05
 
-class Brightness(object):
+class Brightness:
+    '''Manipulates the brightness of SONY VPC Series notebook`s display.
+    '''
     
     def __init__(self):
         self._output = []
@@ -74,7 +80,7 @@ class Brightness(object):
 
     @property
     def actual_bright(self):
-        return self._get_current_bright()
+        return int(self._get_current_bright() / float(self.max_bright))
 
     def set_up(self):
         actual_ratio = (self.actual_bright / float(self.max_bright))
@@ -102,3 +108,25 @@ class Brightness(object):
 
 if __name__ == '__main__':
     b = Brightness()
+    if len(sys.argv) == 2:
+        if sys.argv[1] == 'up':
+            b.set_up()
+        elif sys.argv[1] == 'down':
+            b.set_down()
+        elif sys.argv[1] == 'min':
+            b.set_min()
+        elif sys.argv[1] == 'max':
+            b.set_max()
+        elif sys.argv[1] == 'actual':
+            b.actual_bright
+        elif sys.argv[1] == 'help':
+            print ("bright.py - Usage\n\n"
+                "<value> : set a numerical percentage brightness value\n"
+                "up : set brightness up\n"
+                "down : set brightness down\n"
+                "min : set minimum brightness\n"
+                "max : set maximum brightness\n"
+                "actual : view the actual brightness value\n"
+                "help : claim for help\n")
+        else:
+            b.set(int(sys.argv[1]))
