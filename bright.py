@@ -12,10 +12,10 @@ Class to change brightness in Sony VPC Series notebook`s in Linux.
     >>> b.set_max() # set the brightness to 100%
     >>> b.set_min() # set the brightness to 10%
     >>> b.set_up() # plus the brigthness to 15% (5% step)
-    >>> b.set(96) # plus the brigthness to 96%
-    >>> b.set_up() # not possible change to 101%
+    >>> b.set(99) # plus the brigthness to 99%
+    >>> b.set_up() # not possible change to 104%
     Wrong percentage. Must be > 10% and < 100%.
-    >>> b.set_down() # set the brightness to 91%
+    >>> b.set_down() # set the brightness to 99%
     >>> b.set(10) # set the brightness to 10%
     >>> b.set_down() # not possible change to 5%
     Wrong percentage. Must be > 10% and < 100%.
@@ -23,8 +23,8 @@ Class to change brightness in Sony VPC Series notebook`s in Linux.
     True
     >>> b.set(90, True)
     Setted percentage to 90%.
-    >>> b.actual_bright # get the actual brightness percentage
-    90
+    >>> '%.1f' % b.actual_bright_ratio # get the actual brightness percentage
+    '0.9'
     >>>
 '''
 
@@ -80,15 +80,19 @@ class Brightness:
 
     @property
     def actual_bright(self):
-        return int(self._get_current_bright() / float(self.max_bright))
+        return self._get_current_bright()
+
+    @property
+    def actual_bright_ratio(self):
+        return self._get_current_bright() / float(self._max)
 
     def set_up(self):
-        actual_ratio = (self.actual_bright / float(self.max_bright))
-        self.set(100 * (actual_ratio + _STEP))
+        new_value = int(100 * (self.actual_bright_ratio + _STEP))
+        self.set(new_value)
 
     def set_down(self):
-        actual_ratio = (self.actual_bright / float(self.max_bright))
-        self.set(100 * (actual_ratio - _STEP))
+        new_value = int(100 * (self.actual_bright_ratio - _STEP))
+        self.set(new_value)
 
     def set_min(self):
         self.set(int(100 * _MIN_BRIGHT_RATIO))
@@ -104,6 +108,10 @@ class Brightness:
             if verbose:
                 print 'Setted percentage to %d%%.' % percent
         else:
+            if percent > 100:
+                self.set(100)
+            elif percent < min_bright:
+                self.set(min_bright)
             print 'Wrong percentage. Must be > %d%% and < 100%%.' % min_bright
 
 if __name__ == '__main__':
@@ -118,7 +126,7 @@ if __name__ == '__main__':
         elif sys.argv[1] == 'max':
             b.set_max()
         elif sys.argv[1] == 'actual':
-            b.actual_bright
+            print b.actual_bright
         elif sys.argv[1] == 'help':
             print ("bright.py - Usage\n\n"
                 "<value> : set a numerical percentage brightness value\n"
