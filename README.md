@@ -10,9 +10,17 @@ To change the brightness of the monitor in SONY VAIO VPC series notebooks in Lin
 changes the value of the file '/sys/class/backlight/intel_backlight/brightness' to a value between
 the value of '/sys/class/backlight/intel_backlight/max_brightness' and 10% of it.
 
-To facilitate this, the script use percentage values to abstract the real values. You can use
-max, min, up and down functions.
+To facilitate this, this script use percentage values to abstract the real values. You can use
+max, min, up and down functions, too (see Usage section).
 
+Usage:
+-------------
+
+    $ sudo ./bright.py 50
+    $ sudo ./bright.py up
+    $ sudo ./bright.py down
+    $ sudo ./bright.py max
+    $ sudo ./bright.py min
 
 How to test:
 -------------
@@ -29,16 +37,6 @@ How you can improove it?
 
 The final goal is to associate this scripts to the Brightness hotkeys of the Enviroment (Gnome, KDE, xfce, etc).
 If you know how to do it, please, help us ;)
-
-Usage:
--------------
-
-    $ sudo ./bright.py 50
-    $ sudo ./bright.py up
-    $ sudo ./bright.py down
-    $ sudo ./bright.py max
-    $ sudo ./bright.py min
-
 
 TODO:
 -------------
