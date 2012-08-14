@@ -19,6 +19,11 @@ How to test:
 
     $ python -m doctest bright.py
 
+Tested IN
+------------
+
+- Sony VAIO VPCEG37FM with Ubuntu 12.04 64bit running Gnome 3
+
 How you can improove it?
 -------------
 
