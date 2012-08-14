@@ -38,11 +38,11 @@ Usage:
 TODO:
 -------------
 
-    - Make shell commands
-    - Ask for credentials if needed.
-    - Alert if the user dont have privilege to write in the config file.
+- Make shell commands
+- Ask for credentials if needed.
+- Alert if the user dont have privilege to write in the config file.
 
 Known bugs
 -------------
 
-    - If you execute without a privilege to the config file, nothing happens.
+- If you execute without a privilege to the config file, nothing happens.
